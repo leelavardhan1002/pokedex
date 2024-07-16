@@ -35,7 +35,7 @@ export default async function Home({
   );
 
   return (
-    <main className="flex min-h-screen flex-col px-6 py-10 md:px-16 md:py-10 bg-PRIMARY">
+    <main className="flex min-h-screen flex-col px-1 py-10 md:px-16 md:py-10 bg-PRIMARY">
       <Providers>
         <Header />
         <Suspense fallback={<Loader />}>

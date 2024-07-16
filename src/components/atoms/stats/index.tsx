@@ -169,7 +169,7 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
     <div className="flex flex-col items-start relative">
       <p className="text-[#222c85] text-sm font-medium mb-1 ml-3">{label}</p>
       <div
-        className={`flex items-center rounded-md px-3 py-4 sm:border-none border-[1.5px] border-SECONDARY w-full sm:w-[194px] cursor-pointer ${
+        className={`flex items-center rounded-md px-3 py-4 lg:border-none border-[1.5px] border-SECONDARY w-full lg:w-[194px] cursor-pointer ${
           isOpen ? 'bg-white' : 'bg-TERTIARY'
         }`}
         onClick={() => toggleDropdown('stats')}
@@ -178,12 +178,16 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
         role="button"
         aria-haspopup="true"
         aria-expanded={isOpen}
+        aria-labelledby="stats-dropdown-label"
         id="stats-dropdown"
       >
         <span
           className="flex-1 text-SECONDARY text-sm"
           role="combobox"
           data-testid="StatsDropdown"
+          aria-expanded={isOpen}
+          aria-controls="listbox-id"
+          aria-haspopup="listbox"
         >
           HP <span className="font-extrabold">+ 5 More</span>
         </span>
@@ -210,7 +214,10 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
             </button>
           </div>
           {stats.map((stat) => (
-            <div key={stat} className="flex mb-4 items-center">
+            <div
+              key={stat}
+              className="flex flex-col lg:flex-row mb-4 lg:items-center"
+            >
               <span className="w-1/3 text-SECONDARY text-xs xs:text-sm mb-2 min-w-[70px]">
                 {stat}
               </span>

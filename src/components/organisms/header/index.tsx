@@ -100,12 +100,22 @@ export default function Header() {
             />
           </div>
 
-          <button className="flex lg:hidden pb-8">
+          <button
+            className="flex lg:hidden pb-8"
+            onClick={() => setIsModalOpen(true)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsModalOpen(true);
+              }
+            }}
+            aria-label="Open filters"
+            data-testid="bs-list-check-icon"
+            tabIndex={0}
+          >
             <BsListCheck
               size={24}
               className="bg-SECONDARY rounded-lg w-[65px] h-[48px] p-[10px]"
-              onClick={() => setIsModalOpen(true)}
-              data-testid="bs-list-check-icon"
             />
           </button>
         </div>

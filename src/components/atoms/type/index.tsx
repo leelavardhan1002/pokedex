@@ -67,7 +67,7 @@ const FilterDropdown: React.FC<FilterDropdownComponentProps> = ({
         {label}
       </p>
       <div
-        className={`flex items-center sm:border-none border-[1.5px] border-SECONDARY rounded-md px-3 py-4 w-full md:w-[180px] cursor-pointer ${
+        className={`flex items-center lg:border-none border-[1.5px] border-SECONDARY rounded-md px-3 py-4 w-full lg:w-[180px] cursor-pointer ${
           isOpen ? 'bg-white' : 'bg-TERTIARY'
         }`}
         onClick={() => toggleDropdown(paramName)}
@@ -79,7 +79,13 @@ const FilterDropdown: React.FC<FilterDropdownComponentProps> = ({
         aria-labelledby={`${paramName}-label`}
         id={`${paramName}-button`}
       >
-        <span className="flex-1 text-SECONDARY text-sm" role="combobox">
+        <span
+          className="flex-1 text-SECONDARY text-sm"
+          role="combobox"
+          aria-expanded={isOpen}
+          aria-controls="listbox-id"
+          aria-haspopup="listbox"
+        >
           {selectedOptions.length > 0 ? (
             <span data-testid="selectedOptions">
               {selectedOptions[0]}
