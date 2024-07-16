@@ -11,9 +11,15 @@ jest.mock('next/navigation', () => ({
 
 beforeAll(() => {
   class ResizeObserverMock {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
+    observe(target: Element) {
+      console.log('Observing:', target);
+    }
+    unobserve(target: Element) {
+      console.log('Unobserving:', target);
+    }
+    disconnect() {
+      console.log('Disconnected');
+    }
   }
   global.ResizeObserver = ResizeObserverMock;
 });
