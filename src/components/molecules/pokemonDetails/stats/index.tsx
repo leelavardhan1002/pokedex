@@ -9,7 +9,7 @@ const PokemonStats: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
         <p className="text-SECONDARY font-xl font-bold mb-4 ml-3">Stats</p>
         <div className="flex flex-wrap -mx-2">
           {pokemonDetails.pokemonStats?.map((stat, index) => (
-            <div key={`${stat}-${index}`} className="w-full sm:w-1/2 px-5 mb-4">
+            <div key={stat.stat.name} className="w-full sm:w-1/2 px-5 mb-4">
               <div className="flex justify-between items-center">
                 <div className="w-1/4 text-SECONDARY text-xs">
                   {STATS_NAMES[index]}

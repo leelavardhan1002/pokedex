@@ -24,7 +24,7 @@ export async function generateMetadata({
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { page: string; limit: string };
+  readonly searchParams: { page: string; limit: string };
 }) {
   const currentPage = Number(searchParams.page?.toString() || '1');
   const limit = Number(searchParams.limit?.toString() || '20');

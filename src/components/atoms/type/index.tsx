@@ -18,7 +18,7 @@ const FilterDropdown: React.FC<FilterDropdownComponentProps> = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialSelectedOptions = searchParams.get(paramName)?.split(',') || [];
+  const initialSelectedOptions = searchParams.get(paramName)?.split(',') ?? [];
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     initialSelectedOptions

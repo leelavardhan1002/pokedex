@@ -141,7 +141,7 @@ const PokemonCard: React.FC<PokemonProps> = ({
           className={`${divHeight} ${divWidth} flex justify-center items-center`}
         >
           <Image
-            src={imageUrl || 'pokemonImage'}
+            src={imageUrl ?? 'pokemonImage'}
             alt={name ?? ''}
             lang="en"
             width={imageWidth}

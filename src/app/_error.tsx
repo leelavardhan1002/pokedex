@@ -83,9 +83,9 @@ function ErrorPage({ statusCode }: { readonly statusCode: number }) {
 ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
   let statusCode = 404;
 
-  if (res && res.statusCode) {
+  if (res?.statusCode) {
     statusCode = res.statusCode;
-  } else if (err && err.statusCode) {
+  } else if (err?.statusCode) {
     statusCode = err.statusCode;
   }
 
