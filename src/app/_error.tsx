@@ -3,7 +3,7 @@ import pokemonBall from '@/assests/images/pokeball.png';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function Error({ statusCode }: { statusCode: number }) {
+function ErrorPage({ statusCode }: { readonly statusCode: number }) {
   let errorMessage = '';
 
   switch (statusCode) {
@@ -80,9 +80,16 @@ function Error({ statusCode }: { statusCode: number }) {
   );
 }
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
+  let statusCode = 404;
+
+  if (res && res.statusCode) {
+    statusCode = res.statusCode;
+  } else if (err && err.statusCode) {
+    statusCode = err.statusCode;
+  }
+
   return { statusCode };
 };
 
-export default Error;
+export default ErrorPage;

@@ -9,7 +9,7 @@ import { Providers } from './providers';
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: {
+  readonly searchParams: {
     page: string;
   };
 }): Promise<Metadata> {

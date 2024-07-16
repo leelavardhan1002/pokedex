@@ -9,19 +9,19 @@ export default function SearchBar() {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [searchQuery, setSearchQueryState] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQueryState(event.target.value);
+    setSearch(event.target.value);
   };
 
   const handleSearchKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === 'Enter') {
-      dispatch(setSearchQuery(searchQuery));
+      dispatch(setSearchQuery(search));
       const params = new URLSearchParams(searchParams.toString());
-      params.set('search', searchQuery);
+      params.set('search', search);
       router.push(`?${params.toString()}`);
     }
   };
@@ -29,13 +29,13 @@ export default function SearchBar() {
   useEffect(() => {
     const query = searchParams.get('search');
     if (query) {
-      setSearchQueryState(query);
+      setSearch(query);
       dispatch(setSearchQuery(query));
     }
   }, [searchParams]);
 
   const clearSearch = () => {
-    setSearchQueryState('');
+    setSearch('');
     dispatch(setSearchQuery(''));
     const params = new URLSearchParams(searchParams.toString());
     params.delete('search');
@@ -55,12 +55,12 @@ export default function SearchBar() {
           type="text"
           placeholder="Name or Number"
           id="search"
-          value={searchQuery}
+          value={search}
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
           className="bg-transparent text-sm flex-1 py-2 outline-none text-SECONDARY placeholder-SECONDARY"
         />
-        {searchQuery && (
+        {search && (
           <button
             className="outline-none focus:outline-none  text-SECONDARY text-2xl mr-4"
             onClick={clearSearch}
@@ -69,7 +69,7 @@ export default function SearchBar() {
             <LiaTimesSolid />
           </button>
         )}
-        {!searchQuery && (
+        {!search && (
           <button
             className="outline-none focus:outline-none text-SECONDARY text-2xl mr-4"
             onClick={clearSearch}

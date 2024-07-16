@@ -180,6 +180,7 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
         aria-expanded={isOpen}
         aria-label="Stats Dropdown"
         id="stats-dropdown"
+        data-testid="stats-dropdown"
       >
         <span
           className="flex-1 text-SECONDARY text-sm"

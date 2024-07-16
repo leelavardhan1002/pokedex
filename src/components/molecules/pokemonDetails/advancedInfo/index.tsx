@@ -31,8 +31,11 @@ const PokemonAdvancedInfo: React.FC<PokemonAdvancedInfoProps> = ({
         <div className="col-span-1">
           <p className="text-SECONDARY font-bold text-sm mb-1">Gender(s)</p>
           <div>
-            {pokemonDetails.gender.map((genderType: string, index: number) => (
-              <span className="text-SECONDARY font-medium text-xs" key={index}>
+            {pokemonDetails.gender.map((genderType, index) => (
+              <span
+                className="text-SECONDARY font-medium text-xs"
+                key={`${genderType}-${index}`}
+              >
                 {genderType}
                 {index !== pokemonDetails.gender.length - 1 && ', '}
               </span>
@@ -42,17 +45,15 @@ const PokemonAdvancedInfo: React.FC<PokemonAdvancedInfoProps> = ({
         <div className="col-span-1">
           <p className="text-SECONDARY font-bold text-sm mb-1">Egg Groups</p>
           <div>
-            {pokemonDetails.eggGroups.map(
-              (eggGroupsType: string, index: number) => (
-                <span
-                  className="text-SECONDARY font-medium text-xs"
-                  key={index}
-                >
-                  {eggGroupsType}
-                  {index !== pokemonDetails.eggGroups.length - 1 && ', '}
-                </span>
-              )
-            )}
+            {pokemonDetails.eggGroups.map((eggGroupType, index) => (
+              <span
+                className="text-SECONDARY font-medium text-xs"
+                key={`${eggGroupType}-${index}`}
+              >
+                {eggGroupType}
+                {index !== pokemonDetails.eggGroups.length - 1 && ', '}
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -60,23 +61,21 @@ const PokemonAdvancedInfo: React.FC<PokemonAdvancedInfoProps> = ({
         <div className="col-span-1 md:col-span-1">
           <p className="text-SECONDARY font-bold text-sm mb-1">Abilities</p>
           <div>
-            {pokemonDetails.abilities.map(
-              (abilityType: string, index: number) => (
-                <span
-                  className="text-SECONDARY font-medium text-xs"
-                  key={index}
-                >
-                  {abilityType}
-                  {index !== pokemonDetails.abilities.length - 1 && ', '}
-                </span>
-              )
-            )}
+            {pokemonDetails.abilities.map((abilityType, index) => (
+              <span
+                className="text-SECONDARY font-medium text-xs"
+                key={`${abilityType}-${index}`}
+              >
+                {abilityType}
+                {index !== pokemonDetails.abilities.length - 1 && ', '}
+              </span>
+            ))}
           </div>
         </div>
         <div className="col-span-1 md:col-span-1">
           <p className="text-SECONDARY font-bold text-sm mb-1">Types</p>
           <div>
-            {pokemonDetails.types.map((type: string, index: number) => {
+            {pokemonDetails.types.map((type, index) => {
               let color = '';
               switch (type.toUpperCase()) {
                 case 'FIRE':
@@ -136,7 +135,7 @@ const PokemonAdvancedInfo: React.FC<PokemonAdvancedInfoProps> = ({
               }
               return (
                 <span
-                  key={index}
+                  key={`${type}-${index}`}
                   className={`text-SECONDARY ${color} font-medium text-xs rounded-md border-SECONDARY border-[1.5px] mr-1 p-[2px]`}
                 >
                   {type}
@@ -148,20 +147,19 @@ const PokemonAdvancedInfo: React.FC<PokemonAdvancedInfoProps> = ({
         <div className="col-span-2 md:col-span-2">
           <p className="text-SECONDARY font-bold text-sm mb-1">Weak Against</p>
           <div className="flex flex-wrap">
-            {pokemonDetails.weakAgainst.map(
-              (weakAgainstType: string, index: number) => (
-                <span
-                  key={index}
-                  className={`text-SECONDARY font-medium text-xs rounded-md border-SECONDARY border-[1.5px] mr-1 mb-1 p-[2px] bg-${weakAgainstType.toUpperCase()}`}
-                >
-                  {weakAgainstType}
-                </span>
-              )
-            )}
+            {pokemonDetails.weakAgainst.map((weakAgainstType, index) => (
+              <span
+                key={`${weakAgainstType}-${index}`}
+                className={`text-SECONDARY font-medium text-xs rounded-md border-SECONDARY border-[1.5px] mr-1 mb-1 p-[2px] bg-${weakAgainstType.toUpperCase()}`}
+              >
+                {weakAgainstType}
+              </span>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default PokemonAdvancedInfo;

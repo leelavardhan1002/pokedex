@@ -10,13 +10,12 @@ jest.mock('next/navigation', () => ({
 }));
 
 beforeAll(() => {
-  global.ResizeObserver = class {
+  class ResizeObserverMock {
     observe() {}
-
     unobserve() {}
-
     disconnect() {}
-  };
+  }
+  global.ResizeObserver = ResizeObserverMock;
 });
 
 describe('StatsDropdown', () => {
@@ -60,7 +59,7 @@ describe('StatsDropdown', () => {
       />
     );
 
-    fireEvent.click(screen.getByTestId('StatsDropdown'));
+    fireEvent.click(screen.getByTestId('stats-dropdown'));
     expect(mockToggleDropdown).toHaveBeenCalledWith('stats');
   });
 

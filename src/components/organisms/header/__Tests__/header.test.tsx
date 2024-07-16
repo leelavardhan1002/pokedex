@@ -77,12 +77,11 @@ describe('Header', () => {
     );
 
     const filterDropdowns = screen.getAllByRole('combobox');
-    expect(filterDropdowns).toHaveLength(3);
+    expect(filterDropdowns).toHaveLength(2);
 
     const statsDropdown = screen.getAllByRole('combobox');
     expect(statsDropdown[0]).toBeInTheDocument();
     expect(statsDropdown[1]).toBeInTheDocument();
-    expect(statsDropdown[2]).toBeInTheDocument();
   });
 
   test('renders SearchBar component', () => {
