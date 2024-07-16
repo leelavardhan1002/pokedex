@@ -178,18 +178,12 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
         role="button"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-labelledby="stats-dropdown-label"
+        aria-label="Stats Dropdown"
         id="stats-dropdown"
       >
         <span
           className="flex-1 text-SECONDARY text-sm"
-          role="combobox"
-          data-testid="StatsDropdown"
-          aria-expanded={isOpen}
-          aria-controls="listbox-id"
-          aria-haspopup="listbox"
           id="stats-dropdown-label"
-          aria-hidden="true"
         >
           HP <span className="font-extrabold">+ 5 More</span>
         </span>
@@ -238,6 +232,7 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
                   min={0}
                   max={210}
                   className="w-full h-3"
+                  aria-label={`${stat} Range`}
                 />
                 <span className="w-1/4 text-SECONDARY flex justify-center">
                   {statValues[stat][1]}
@@ -249,12 +244,14 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
             <button
               onClick={resetStats}
               className="bg-white text-SECONDARY text-xs font-bold border border-SECONDARY rounded-md px-4 py-2 mr-2"
+              aria-label="Reset Stats"
             >
               Reset
             </button>
             <button
               onClick={applyStats}
               className="bg-SECONDARY text-xs font-bold text-white rounded-md px-4 py-2"
+              aria-label="Apply Stats"
             >
               Apply
             </button>
