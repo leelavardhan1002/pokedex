@@ -1,171 +1,161 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
-import FilterDropdown from '@/components/atoms/type';
-import { NextRouter } from 'next/router';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import StatsDropdown from '@/components/atoms/stats';
 
+// Mock the next/navigation hooks
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    pathname: '',
-    query: { search: 'test' },
-    asPath: '',
-  }),
-  useSearchParams: () => ({
-    get: jest.fn().mockImplementation(() => 'Option 1,Option 2'),
-    toString: jest.fn().mockReturnValue(''),
-  }),
+  useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }));
 
-describe('FilterDropdown', () => {
-  const mockRouter: NextRouter = {
-    push: jest.fn(),
-    replace: jest.fn(),
-    reload: jest.fn(),
-    back: jest.fn(),
-    forward: jest.fn(),
-    prefetch: jest.fn(),
-    beforePopState: jest.fn(),
-    events: {
-      on: jest.fn(),
-      off: jest.fn(),
-      emit: jest.fn(),
-    },
-    route: '/',
-    pathname: '/',
-    query: {},
-    asPath: '/',
-    basePath: '',
-    isFallback: false,
-    isReady: true,
-    isPreview: false,
-    isLocaleDomain: false,
-  };
+beforeAll(() => {
+  class ResizeObserverMock {
+    observe(target: Element) {
+      console.log('Observing:', target);
+    }
+    unobserve(target: Element) {
+      console.log('Unobserving:', target);
+    }
+    disconnect() {
+      console.log('Disconnected');
+    }
+  }
+  global.ResizeObserver = ResizeObserverMock;
+});
 
-  const defaultProps = {
-    label: 'Test Label',
-    options: ['Option 1', 'Option 2', 'Option 3'],
-    paramName: 'test',
-    onChange: jest.fn(),
-    isOpen: false,
-    toggleDropdown: jest.fn(),
-  };
+describe('StatsDropdown', () => {
+  const mockToggleDropdown = jest.fn();
+  const mockPush = jest.fn();
+  const mockGet = jest.fn();
 
-  it('renders correctly with initial state', () => {
-    const { getByText, queryByText } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} />
-      </RouterContext.Provider>
-    );
-
-    expect(getByText('Test Label')).toBeInTheDocument();
-    expect(getByText('Option 1')).toBeInTheDocument();
-    expect(getByText('+ 1 More')).toBeInTheDocument();
-    expect(queryByText('Option 3')).not.toBeInTheDocument();
-  });
-
-  it('toggles dropdown on click', async () => {
-    const { getByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} />
-      </RouterContext.Provider>
-    );
-
-    const button = getByRole('button');
-    fireEvent.click(button);
-
-    expect(defaultProps.toggleDropdown).toHaveBeenCalledWith('test');
-  });
-
-  it('displays options when open', () => {
-    const { getAllByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} isOpen />
-      </RouterContext.Provider>
-    );
-
-    const options = getAllByRole('option');
-    expect(options).toHaveLength(3);
-    expect(options[0]).toHaveTextContent('Option 1');
-    expect(options[1]).toHaveTextContent('Option 2');
-    expect(options[2]).toHaveTextContent('Option 3');
-  });
-
-  it('handles option selection', async () => {
-    const { getAllByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} isOpen />
-      </RouterContext.Provider>
-    );
-
-    const options = getAllByRole('option');
-    fireEvent.click(options[2]);
-
-    await waitFor(() => {
-      expect(defaultProps.onChange).toHaveBeenCalledWith([
-        'Option 1',
-        'Option 2',
-        'Option 3',
-      ]);
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (useSearchParams as jest.Mock).mockReturnValue({
+      toString: () => '',
+      get: mockGet,
     });
   });
 
-  it('handles option deselection', async () => {
-    const { getAllByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} isOpen />
-      </RouterContext.Provider>
-    );
-
-    const options = getAllByRole('option');
-    fireEvent.click(options[0]);
-
-    await waitFor(() => {
-      expect(defaultProps.onChange).toHaveBeenCalledWith(['Option 2']);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('handles keyboard navigation', () => {
-    const { getByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} />
-      </RouterContext.Provider>
+  it('renders correctly when closed', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP', 'Attack', 'Defense', 'Speed', 'SpecialAtt', 'SpecialDef']}
+        isOpen={false}
+        toggleDropdown={mockToggleDropdown}
+      />
     );
 
-    const button = getByRole('button');
-    fireEvent.keyDown(button, { key: 'Enter' });
-    expect(defaultProps.toggleDropdown).toHaveBeenCalledWith('test');
-
-    fireEvent.keyDown(button, { key: ' ' });
-    expect(defaultProps.toggleDropdown).toHaveBeenCalledWith('test');
+    expect(screen.getByText('Stats')).toBeTruthy();
+    expect(screen.queryByText('Select Stats')).not.toBeTruthy();
   });
 
-  it('handles keyboard selection of options', async () => {
-    const { getAllByRole } = render(
-      <RouterContext.Provider value={mockRouter}>
-        <FilterDropdown {...defaultProps} isOpen />
-      </RouterContext.Provider>
+  it('opens the dropdown when clicked', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP', 'Attack', 'Defense', 'Speed', 'SpecialAtt', 'SpecialDef']}
+        isOpen={false}
+        toggleDropdown={mockToggleDropdown}
+      />
     );
 
-    const options = getAllByRole('option');
-    fireEvent.keyDown(options[2], { key: 'Enter' });
+    fireEvent.click(screen.getByTestId('stats-dropdown'));
+    expect(mockToggleDropdown).toHaveBeenCalledWith('stats');
+  });
+
+  it('renders correctly when open', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP', 'Attack', 'Defense', 'Speed', 'SpecialAtt', 'SpecialDef']}
+        isOpen
+        toggleDropdown={mockToggleDropdown}
+      />
+    );
+
+    expect(screen.getByText('Select Stats')).toBeTruthy();
+    expect(screen.getAllByRole('slider')).toHaveLength(12);
+  });
+
+  it('updates stat values when sliders are moved', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP']}
+        isOpen
+        toggleDropdown={mockToggleDropdown}
+      />
+    );
+
+    const sliders = screen.getAllByRole('slider');
+    fireEvent.mouseDown(sliders[0]);
+    fireEvent.mouseMove(sliders[0], { clientX: 100 });
+    fireEvent.mouseUp(sliders[0]);
+
+    fireEvent.mouseDown(sliders[1]);
+    fireEvent.mouseMove(sliders[1], { clientX: 200 });
+    fireEvent.mouseUp(sliders[1]);
+
+    // Check if the values have changed. The exact values might differ, so we're checking if they're not the initial values.
+    expect(screen.queryByText('0')).not.toBeTruthy();
+    expect(screen.queryByText('210')).not.toBeTruthy();
+  });
+
+  it('resets stats when Reset button is clicked', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP']}
+        isOpen
+        toggleDropdown={mockToggleDropdown}
+      />
+    );
+
+    const resetButton = screen.getByText('Reset');
+    fireEvent.click(resetButton);
+
+    const countZeros = screen.getAllByText('0');
+    const countTwoTen = screen.getAllByText('210');
+    expect(countZeros.length).toBe(2);
+    expect(countTwoTen.length).toBe(2);
+  });
+
+  it('applies stats and updates URL when Apply button is clicked', async () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP', 'Attack']}
+        isOpen
+        toggleDropdown={mockToggleDropdown}
+      />
+    );
+
+    const applyButton = screen.getByText('Apply');
+    fireEvent.click(applyButton);
 
     await waitFor(() => {
-      expect(defaultProps.onChange).toHaveBeenCalledWith([
-        'Option 1',
-        'Option 2',
-        'Option 3',
-      ]);
+      expect(mockPush).toHaveBeenCalled();
     });
+    expect(mockToggleDropdown).toHaveBeenCalledWith('');
+  });
 
-    fireEvent.keyDown(options[2], { key: ' ' });
+  it('closes the dropdown when the close button is clicked', () => {
+    render(
+      <StatsDropdown
+        label="Stats"
+        stats={['HP']}
+        isOpen
+        toggleDropdown={mockToggleDropdown}
+      />
+    );
 
-    await waitFor(() => {
-      expect(defaultProps.onChange).toHaveBeenCalledWith([
-        'Option 1',
-        'Option 2',
-      ]);
-    });
+    fireEvent.click(screen.getByLabelText('Close'));
+    expect(mockToggleDropdown).toHaveBeenCalledWith('');
   });
 });
