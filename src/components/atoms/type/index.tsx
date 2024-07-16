@@ -85,6 +85,8 @@ const FilterDropdown: React.FC<FilterDropdownComponentProps> = ({
           aria-expanded={isOpen}
           aria-controls="listbox-id"
           aria-haspopup="listbox"
+          id={`${paramName}-button`}
+          aria-labelledby={`${paramName}-label`}
         >
           {selectedOptions.length > 0 ? (
             <span data-testid="selectedOptions">

@@ -176,7 +176,7 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
         onKeyDown={handleKeyDown}
         tabIndex={0}
         role="button"
-        aria-haspopup="true"
+        aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-labelledby="stats-dropdown-label"
         id="stats-dropdown"
@@ -188,6 +188,8 @@ const StatsDropdown: React.FC<StatsDropdownProps> = ({
           aria-expanded={isOpen}
           aria-controls="listbox-id"
           aria-haspopup="listbox"
+          id="stats-dropdown-label"
+          aria-hidden="true"
         >
           HP <span className="font-extrabold">+ 5 More</span>
         </span>
