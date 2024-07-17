@@ -71,7 +71,7 @@ const EvolutionChain: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
       <div className="flex justify-between items-start mt-8 gap-2">
         {prevPokemonName && (
           <Link
-            href={`/pokemon-detail-page/${currentId - 1}`}
+            href={`/pokemon-detail-page/${currentId - 1}/${prevPokemonName.toLowerCase()}`}
             aria-label={`View details for ${prevPokemonName}`}
           >
             <button
@@ -87,7 +87,7 @@ const EvolutionChain: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
         )}
         {nextPokemonName && (
           <Link
-            href={`/pokemon-detail-page/${currentId + 1}`}
+            href={`/pokemon-detail-page/${currentId + 1}/${nextPokemonName.toLowerCase()}`}
             aria-label={`View details for ${nextPokemonName}`}
           >
             <button
