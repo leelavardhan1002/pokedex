@@ -87,7 +87,7 @@ const PokemonBasicInfo: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
           <div className="hidden sm:block h-10 border-l border-SECONDARY mx-4" />
           <div className="flex items-start mt-2 gap-2">
             <Link
-              href={`${currentId - 1}`}
+              href={`/pokemon-detail-page/${currentId - 1}/${pokemonDetails.prevPokemonName?.toLowerCase()}`}
               passHref
               aria-label="Go to previous Pokemon"
             >
@@ -106,7 +106,7 @@ const PokemonBasicInfo: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
               <BsXCircle className="text-xl" />
             </button>
             <Link
-              href={`${currentId + 1}`}
+              href={`/pokemon-detail-page/${currentId + 1}/${pokemonDetails.nextPokemonName?.toLowerCase()}`}
               passHref
               aria-label="Go to next Pokemon"
             >

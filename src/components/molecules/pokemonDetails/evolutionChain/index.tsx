@@ -42,7 +42,9 @@ const EvolutionChain: React.FC<PokemonInfoProps> = ({ pokemonDetails }) => {
         {pokemonDetailsList?.map((detail, index) => (
           <React.Fragment key={detail.id}>
             <div className="">
-              <Link href={`/pokemon-detail-page/${detail.id}`}>
+              <Link
+                href={`/pokemon-detail-page/${detail.id}/${detail.pokemonName.toLowerCase()}`}
+              >
                 <PokemonCard
                   name={detail.pokemonName}
                   imageUrl={detail.imageUrl}

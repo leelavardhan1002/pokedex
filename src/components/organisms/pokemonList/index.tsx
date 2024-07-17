@@ -10,6 +10,7 @@ import Pagination from '@/components/atoms/pagination';
 import Error from '@/app/_error';
 import { PokemonDetail } from '@/utils/types';
 import Loader from '@/components/atoms/loader';
+import { DETAIL_STATS_NAMES } from '@/utils/constants';
 
 interface PokemonListClientProps {
   initialPokemons: PokemonDetail[];
@@ -36,8 +37,8 @@ const PokemonListClient: React.FC<PokemonListClientProps> = ({
   const searchQuery = useSelector(
     (state: RootState) => state.search.searchQuery
   );
-  const selectedGenders = searchParams.get('genders')?.split(',') || [];
-  const selectedTypes = searchParams.get('types')?.split(',') || [];
+  const selectedGenders = searchParams.get('genders')?.split(',') ?? [];
+  const selectedTypes = searchParams.get('types')?.split(',') ?? [];
   const statRanges: [string, number[] | undefined][] = [
     ['hp', searchParams.get('HP')?.split(',').map(Number)],
     ['attack', searchParams.get('Attack')?.split(',').map(Number)],
@@ -94,6 +95,28 @@ const PokemonListClient: React.FC<PokemonListClientProps> = ({
     );
   });
 
+  const clearFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete('types');
+    params.delete('genders');
+
+    DETAIL_STATS_NAMES.forEach((stat) => {
+      params.delete(stat);
+    });
+
+    params.delete('search');
+
+    const page = params.get('page');
+    const limit = params.get('limit');
+
+    params.forEach((value, key) => params.delete(key));
+    if (page) params.set('page', page);
+    if (limit) params.set('limit', limit);
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const handlePageChange = (newPage: number) => {
     setIsNavigating(true);
     const params = new URLSearchParams(searchParams.toString());
@@ -120,13 +143,26 @@ const PokemonListClient: React.FC<PokemonListClientProps> = ({
         <Loader />
       ) : (
         <div>
+          <div className="flex justify-end mr-4 mt-2">
+            <button
+              onClick={() => {
+                clearFilters();
+              }}
+              className="bg-SECONDARY text-xs font-bold text-white rounded-md px-4 py-2 w-fit hidden lg:block"
+              aria-label="clear filters"
+            >
+              Clear Filters
+            </button>
+          </div>
           <div className="flex flex-wrap">
             {filteredPokemons.map((pokemon) => (
               <div
                 key={pokemon.id}
                 className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/6 flex justify-evenly mt-4 mb-2"
               >
-                <Link href={`pokemon-detail-page/${pokemon.formattedId}`}>
+                <Link
+                  href={`pokemon-detail-page/${pokemon.formattedId}/${pokemon.name.toLowerCase()}`}
+                >
                   <PokemonCard
                     id={parseInt(pokemon.id)}
                     imageUrl={pokemon.imageUrl}

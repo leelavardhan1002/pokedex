@@ -16,6 +16,7 @@ import {
 import { capitalizeFirstLetter } from '@/utils/helper';
 import { apiClient } from '@/api/apiService';
 import log from 'loglevel';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +24,9 @@ export default function Header() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
   const [openDropdown, setOpenDropdown] = useState<string>('');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathName = usePathname();
 
   const handleTypeChange = (types: string[]) => {
     setSelectedTypes(types);
@@ -53,6 +57,28 @@ export default function Header() {
 
     fetchTypes();
   }, []);
+
+  const clearFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete('types');
+    params.delete('genders');
+
+    DETAIL_STATS_NAMES.forEach((stat) => {
+      params.delete(stat);
+    });
+
+    params.delete('search');
+
+    const page = params.get('page');
+    const limit = params.get('limit');
+
+    params.forEach((value, key) => params.delete(key));
+    if (page) params.set('page', page);
+    if (limit) params.set('limit', limit);
+
+    router.push(`${pathName}?${params.toString()}`);
+  };
 
   return (
     <header
@@ -145,6 +171,17 @@ export default function Header() {
             isOpen={openDropdown === 'stats'}
             toggleDropdown={toggleDropdown}
           />
+        </div>
+        <div className="flex justify-center items-end mr-4 mt-2">
+          <button
+            onClick={() => {
+              clearFilters();
+            }}
+            className="bg-SECONDARY text-xs font-bold text-white rounded-md px-4 py-2 w-fit"
+            aria-label="clear filters"
+          >
+            Clear Filters
+          </button>
         </div>
       </Modal>
     </header>

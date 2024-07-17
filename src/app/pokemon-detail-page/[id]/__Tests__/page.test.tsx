@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { fetchPokemonDetails } from '@/api/data';
-import { generateMetadata } from '../page';
+import { generateMetadata } from '../[name]/page';
 
 // Mock the imported components and functions
 jest.mock('../../../../components/molecules/pokemonDetails/basicInfo', () => ({
@@ -44,8 +44,8 @@ jest.mock('../../../../api/data', () => ({
   fetchPokemons: jest.fn(),
 }));
 
-jest.mock('../page', () => {
-  const originalModule = jest.requireActual('../page');
+jest.mock('../[name]/page', () => {
+  const originalModule = jest.requireActual('../[name]/page');
   return {
     ...originalModule,
     PokemonDetailPageContent: jest.fn(({ id }) => (
@@ -66,7 +66,9 @@ describe('generateStaticParams', () => {
 
     (fetchPokemonDetails as jest.Mock).mockResolvedValue(mockPokemonDetails);
 
-    const metadata = await generateMetadata({ params: { id: '1' } });
+    const metadata = await generateMetadata({
+      params: { id: '1', name: 'bulbasaur' },
+    });
 
     expect(metadata).toEqual({
       title: 'Bulbasaur | Pokemon Details',
@@ -80,7 +82,9 @@ describe('generateStaticParams', () => {
   it('generates not found metadata for non-existent Pokemon', async () => {
     (fetchPokemonDetails as jest.Mock).mockResolvedValue(null);
 
-    const metadata = await generateMetadata({ params: { id: '999999' } });
+    const metadata = await generateMetadata({
+      params: { id: '999999', name: 'charmander' },
+    });
 
     expect(metadata).toEqual({
       title: 'Pokemon Not Found',

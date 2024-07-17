@@ -19,6 +19,7 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => ({
     get: jest.fn().mockImplementation(() => ''),
   }),
+  usePathname: jest.fn().mockImplementation(() => ''),
 }));
 
 const mockReducer = (state = {}) => {

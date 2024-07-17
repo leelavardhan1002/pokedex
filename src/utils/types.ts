@@ -34,7 +34,7 @@ export interface PokemonProps {
   showId?: boolean;
   divWidth?: string;
   divHeight?: string;
-  details?: any;
+  details?: PokemonDetails[];
   prevPokemonName?: string;
   nextPokemonName?: string;
 }
@@ -46,6 +46,7 @@ export interface PokemonInfoProps {
 export interface PokemonDetailPageProps {
   params: {
     id: string;
+    name: string;
   };
 }
 
