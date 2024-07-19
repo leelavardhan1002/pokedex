@@ -18,23 +18,29 @@ const FilterDropdown: React.FC<FilterDropdownComponentProps> = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialSelectedOptions = searchParams.get(paramName)?.split(',') ?? [];
-
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
-    initialSelectedOptions
+    searchParams.get(paramName)?.split(',') ?? []
   );
 
   useEffect(() => {
+    const newSelectedOptions = searchParams.get(paramName)?.split(',') ?? [];
+    setSelectedOptions(newSelectedOptions);
+  }, [searchParams, paramName]);
+
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
+    const currentParamValue = params.get(paramName);
+    const newParamValue = selectedOptions.join(',');
 
-    if (selectedOptions.length > 0) {
-      params.set(paramName, selectedOptions.join(','));
-    } else {
-      params.delete(paramName);
+    if (currentParamValue !== newParamValue) {
+      if (selectedOptions.length > 0) {
+        params.set(paramName, newParamValue);
+      } else {
+        params.delete(paramName);
+      }
+      router.push(`?${params.toString()}`, { scroll: false });
     }
-
-    router.push(`?${params.toString()}`);
-  }, [selectedOptions, paramName, router]);
+  }, [selectedOptions, paramName, router, searchParams]);
 
   const handleOptionClick = (option: string) => {
     const newSelectedOptions = selectedOptions.includes(option)
